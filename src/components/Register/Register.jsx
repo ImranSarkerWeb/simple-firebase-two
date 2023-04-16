@@ -1,20 +1,46 @@
 import React from "react";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import app from "../../../firebase.config";
 
+const auth = getAuth(app);
 const Register = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    console.log(email, password);
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => console.error(error.message));
+    e.target.email.value = "";
+    e.target.password.value = "";
+  };
   return (
-    <div>
+    <div className="w-50 mt-5 mx-auto">
       <h4>Please Register</h4>
-      <input type="email" name="email" id="email" placeholder="Your Email" />
-      <br />
-      <input
-        type="password"
-        name="password"
-        id="password"
-        placeholder="Your Password"
-      />
-      <br />
-      <input type="submit" value="Submit" />
-      <br />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          className="w-50 mb-5 rounded ps-2"
+          name="email"
+          id="email"
+          placeholder="Your Email"
+        />
+        <br />
+        <input
+          className="w-50 mb-5 rounded ps-2"
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Your Password"
+        />
+        <br />
+        <input className="btn btn-primary" type="submit" value="Submit" />
+        <br />
+      </form>
     </div>
   );
 };
