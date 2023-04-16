@@ -1,22 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import app from "../../../firebase.config";
 
 const auth = getAuth(app);
 const Register = () => {
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
     console.log(email, password);
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         const user = result.user;
+        setError("");
+        setSuccess("User has been created successfully!");
         console.log(user);
       })
-      .catch((error) => console.error(error.message));
-    e.target.email.value = "";
-    e.target.password.value = "";
+      .catch((error) => {
+        console.error(error.message);
+        setError(error.message);
+        setSuccess("");
+      });
+
+    form.email.value = "";
+    form.password.value = "";
   };
   return (
     <div className="w-50 mt-5 mx-auto">
@@ -40,6 +50,8 @@ const Register = () => {
         <br />
         <input className="btn btn-primary" type="submit" value="Submit" />
         <br />
+        <p className="text-danger">{error}</p>
+        <p className="text-success">{success}</p>
       </form>
     </div>
   );
