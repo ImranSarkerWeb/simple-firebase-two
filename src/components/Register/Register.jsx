@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from "firebase/auth";
 import app from "../../../firebase.config";
 
 const auth = getAuth(app);
@@ -11,12 +15,14 @@ const Register = () => {
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
+    const name = form.name.value;
     console.log(email, password);
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         const user = result.user;
         setError("");
         setSuccess("User has been created successfully!");
+        handleUserProfile(result.user, name);
         console.log(user);
       })
       .catch((error) => {
@@ -28,10 +34,29 @@ const Register = () => {
     form.email.value = "";
     form.password.value = "";
   };
+  const handleUserProfile = (user, name) => {
+    updateProfile(user, {
+      displayName: name,
+    })
+      .then(() => {
+        console.log("Success!");
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  };
   return (
     <div className="w-50 mt-5 mx-auto">
       <h4>Please Register</h4>
       <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          className="w-50 mb-5 rounded ps-2"
+          name="name"
+          id="user-name"
+          placeholder="Your Name"
+        />
+        <br />
         <input
           type="email"
           className="w-50 mb-5 rounded ps-2"
