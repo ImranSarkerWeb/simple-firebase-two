@@ -5,6 +5,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import app from "../../../firebase.config";
+import { Link } from "react-router-dom";
 
 const auth = getAuth(app);
 const Register = () => {
@@ -73,6 +74,9 @@ const Register = () => {
           placeholder="Your Password"
         />
         <br />
+        <p>
+          Alredy registered! <Link to="/login">Sign In</Link>
+        </p>
         <input className="btn btn-primary" type="submit" value="Submit" />
         <br />
         <p className="text-danger">{error}</p>
