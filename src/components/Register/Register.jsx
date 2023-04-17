@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
 import app from "../../../firebase.config";
@@ -24,6 +25,7 @@ const Register = () => {
         setError("");
         setSuccess("User has been created successfully!");
         handleUserProfile(result.user, name);
+        handleVerify(result.user);
         console.log(user);
       })
       .catch((error) => {
@@ -45,6 +47,11 @@ const Register = () => {
       .catch((error) => {
         setError(error.message);
       });
+  };
+  const handleVerify = (user) => {
+    sendEmailVerification(user).then(() => {
+      alert("verification message has been sent your mail");
+    });
   };
   return (
     <div className="w-50 mt-5 mx-auto">
